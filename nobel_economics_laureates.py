@@ -1,19 +1,19 @@
-# nba_champions.py
-# Script to scrape the list of NBA champions from Wikipedia
-# Wikipedia URL: https://en.wikipedia.org/wiki/List_of_NBA_champions
+# nobel_economics_laureates.py
+# Script to scrape the list of Nobel Memorial Prize laureates in Economics from Wikipedia
+# Wikipedia URL: https://en.wikipedia.org/wiki/List_of_Nobel_Memorial_Prize_laureates_in_Economic_Sciences
 
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-def scrape_nba_champions(url):
+def scrape_nobel_economics_laureates(url):
     response = requests.get(url)
     if response.status_code != 200:
         print('Failed to retrieve the webpage')
         return
 
     soup = BeautifulSoup(response.content, 'html.parser')
-    table = soup.find_all('table', {'class': 'wikitable'})[-1]  # The champions table is usually the last one
+    table = soup.find('table', {'class': 'wikitable'})
     headers = [header.text.strip() for header in table.find_all('th')]
     rows = table.find_all('tr')
     table_data = []
@@ -28,8 +28,8 @@ def scrape_nba_champions(url):
     return df
 
 if __name__ == "__main__":
-    URL = 'https://en.wikipedia.org/wiki/List_of_NBA_champions'
-    df_champions = scrape_nba_champions(URL)
-    if df_champions is not None:
-        print(df_champions.head())
-        df_champions.to_csv('nba_champions.csv', index=False)
+    URL = 'https://en.wikipedia.org/wiki/List_of_Nobel_Memorial_Prize_laureates_in_Economic_Sciences'
+    df_laureates = scrape_nobel_economics_laureates(URL)
+    if df_laureates is not None:
+        print(df_laureates.head())
+        df_laureates.to_csv('nobel_economics_laureates.csv', index=False)
